@@ -6,18 +6,37 @@ with open('apis.json', 'r') as apis:
     json_dict = json.load(apis)
 path_to_images = json_dict["images"]
 
+
 disclient = commands.Bot(command_prefix = '.')
 
+# @disclient.command(aliases=['stop!'])
+# async def stop(ctx):
+#     await ctx.send("stopping bot!")
 
-@disclient.command(aliases=['stop!'])
-async def stop(ctx):
-    await ctx.send("stopping bot!")
-    
+
+@disclient.command(aliases=['h'])
+async def help_list_send(ctx):
+    help_list = json_dict["help"]
+    # formatted_list = []
+    for element in help_list:
+        await ctx.send("`"+element+"`")
+
 
 @disclient.command(aliases=['inputs'])
 async def folder_list(ctx):
-    to_send = os.listdir(path_to_images)
-    await ctx.send('```' + str(to_send) + '```')  # send a list of available inputs for fap command
+    _space = ""
+    _spaces = " "
+    _quote = "`"
+    to_send = [os.listdir(path_to_images)]
+    for element in to_send:
+        element_str = str(element)
+        element_str = element_str.replace(",", _spaces)
+        element_str = element_str.replace("'", _quote)
+        element_str = element_str.replace("'", _quote)  # replace the wall character
+        element_str = element_str.replace("[", _space)
+        element_str = element_str.replace("]", _space)  # replace the space character
+        await ctx.send("".join(element_str))  # send a list of available inputs for fap command
+        # print("".join(element_str))
 
 
 @disclient.command(aliases=['random'])
@@ -41,8 +60,6 @@ async def send_thing(ctx):
 
 @disclient.command(aliases=['fap'])
 async def send_specified(ctx, input, filetype='.jpg', number=5):  # define some params so user does not need to enter
-    if not input:
-        return await ctx.send("No name given, please input a name after command")
 
     user_wants = path_to_images + str(input) + '/'
     files_list = []
@@ -69,6 +86,21 @@ async def on_ready():
     print("bot is online!")
 
 
+
 disclient.run(json_dict["discord_token"])
 
 gfyclient = GfycatClient(json_dict["client_id"], json_dict["client_secret"])
+
+# basic concepts
+
+# import discord
+
+# class MyClient(discord.Client):
+#     async def on_ready(self):
+#         print('Logged on as {0}!'.format(self.user))
+
+#     async def on_message(self, message):
+#         print('Message from {0.author}: {0.content}'.format(message))
+
+# client = MyClient()
+# client.run('my token goes here')
