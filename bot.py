@@ -54,14 +54,13 @@ async def send_thing(ctx):
     gamma = random.choice(beta_refined)  # picks a random image from the path
     delta = path_to_images + alpha + '/' + gamma
     print("Send out " + delta)
+    await ctx.send("Sending out " + alpha.title() + "!")
     await ctx.send(file= discord.File(delta))
-    await ctx.send("Ran out of files!")
     
 
 
 @disclient.command(aliases=['fap'])
 async def send_specified(ctx, input, filetype='.jpg', number=5):  # define some params so user does not need to enter
-
     user_wants = path_to_images + str(input) + '/'
     files_list = []
     if os.path.exists(user_wants):
