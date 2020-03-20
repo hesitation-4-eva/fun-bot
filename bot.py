@@ -51,11 +51,12 @@ async def send_thing(ctx):
     for images in beta:
         if ".mp4" not in images and ".ini" not in images and os.stat(path_to_images + alpha + '/' + images).st_size < 800 * 1000:
             beta_refined.append(images)  # appends all of the images to the list
-
     gamma = random.choice(beta_refined)  # picks a random image from the path
     delta = path_to_images + alpha + '/' + gamma
     print("Send out " + delta)
     await ctx.send(file= discord.File(delta))
+    await ctx.send("Ran out of files!")
+    
 
 
 @disclient.command(aliases=['fap'])
@@ -73,11 +74,15 @@ async def send_specified(ctx, input, filetype='.jpg', number=5):  # define some 
         await ctx.send("Nothing for " + input)
 
     for _ in range(int(number)):
-        choice = random.choice(files_list)
-        send_out = user_wants + choice
-        print("Sent out " + send_out)
-        await ctx.send(file= discord.File(send_out))
-        files_list.remove(choice)
+        try:
+            choice = random.choice(files_list)
+            send_out = user_wants + choice
+            print("Sent out " + send_out)
+            await ctx.send(file= discord.File(send_out))
+            files_list.remove(choice)
+        except IndexError:
+            await ctx.send("Ran out of files!")
+            break
         
 
 @disclient.event
